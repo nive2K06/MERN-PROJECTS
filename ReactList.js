@@ -5,7 +5,7 @@ function ReactList() {
 
     const users = [
         { id: 1, name: 'Thivi', age: 20 },
-        { id: 2, name: 'Hekajan', age: 20 },
+        { id: 2, name: 'Hekajan', age: 26 },
         { id: 3, name: 'Nive', age: 20 },
     ];
     return(
@@ -16,21 +16,16 @@ function ReactList() {
                         <li key={index}>{f}</li>)}
                 </ul>
 
-                <table cellSpacing={25} border={20}>
-                    <tr>
-                        <th>User ID</th>
-                        <th>Name</th>
-                        <th>Age</th>
-                    </tr>
+                <ul>
                     {users.map((user) => (
-                     <tr>
-                         <td>{user.id}</td>
-                         <td>{user.name}</td>
-                          <td>{user.age}</td>
-                     </tr>
-                    ))}
-                    </table>
-                
+                       user.age >= 25?(
+                        <li key={user.id}>{user.name} is a Senior</li>
+                       ):(
+                        <li key={user.id}>{user.name} is a Junior</li>
+                       )
+                       ))}
+
+                </ul>
             </div>
 
         );
