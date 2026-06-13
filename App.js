@@ -1,35 +1,176 @@
-import React from "react";
-import bg from "./images/theme.jpg";
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
-  const message = "hello,JSX works!";
-  const paragraph = "JSX (JavaScript XML) is a syntax extension for JavaScript commonly used in React to describe what the user interface should look like. It allows developers to write HTML-like code directly within JavaScript, making UI components more readable and easier to maintain. JSX is not understood by browsers directly; instead, it is transpiled (usually by tools like Babel) into standard JavaScript function calls, such as React.createElement(). This approach enables developers to combine markup and logic in a single file, improving component cohesion. JSX also supports embedding JavaScript expressions inside curly braces {},making it dynamic and flexible for rendering data-driven content.";
-  const name = "THIVIJAN";
-  // embedding expressions in jsx
-  const PI = 3.14159;
-  const description = `The value of PI approximately ${PI}`;
-  // Using JSX to create elements
-  const theme = <img src={bg} alt="Theme for web" />
-  //Passing children to JSX element
-  const Welcome = (props) => {
-    return <div>{props.children}</div>;
-  }
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    university: "",
+    objective: "",
+    degree: "BSc IT",
+    skills: []
+  });
+
+  const [skillInput, setSkillInput] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const addSkill = () => {
+    if (skillInput.trim() !== "") {
+      setFormData({
+        ...formData,
+        skills: [...formData.skills, skillInput]
+      });
+
+      setSkillInput("");
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
 
   return (
+    <div className="container">
+      <h1>React CV Builder</h1>
 
-    <Welcome>
+      <form onSubmit={handleSubmit} className="form">
+        <input
+          type="text"
+          name="fullName"
+          placeholder="Full Name"
+          value={formData.fullName}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <input
+          type="text"
+          name="phone"
+          placeholder="Phone"
+          value={formData.phone}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <input
+          type="text"
+          name="university"
+          placeholder="University"
+          value={formData.university}
+          onChange={handleChange}
+          required
+        />
 
-      <h1>{message}</h1>
-      <ul>
-        <li><a href="#">home</a></li>
-      </ul>
-      <p>{paragraph}</p>
-      <p>{description}</p>
-      <h3>Author,{name}</h3>
-      {theme}
+        <select
+          name="degree"
+          value={formData.degree}
+          onChange={handleChange}
+        >
+          <option>BSc IT</option>
+          <option>BSc SE</option>
+          <option>BSc CS</option>
+        </select>
+        <br />
+        <textarea
+          name="objective"
+          placeholder="Career Objective"
+          value={formData.objective}
+          onChange={handleChange}
+        />
+        <br />
+        <div className="skill-section">
+          <input
+            type="text"
+            placeholder="Enter Skill"
+            value={skillInput}
+            onChange={(e) => setSkillInput(e.target.value)}
+          />
 
+          <button type="button" onClick={addSkill}>
+            Add Skill
+          </button>
+        </div>
 
-    </Welcome>
+        <button type="submit">Generate CV</button>
+      </form>
+
+      {submitted && (
+        <div className="cv">
+          <h2>CURRICULUM VITAE</h2>
+
+          <p>
+            <strong>Name:</strong> {formData.fullName}
+          </p>
+
+          <p>
+            <strong>Email:</strong> {formData.email}
+          </p>
+
+          <p>
+            <strong>Phone:</strong> {formData.phone}
+          </p>
+
+          <p>
+            <strong>University:</strong> {formData.university}
+          </p>
+
+          <p>
+            <strong>Degree:</strong> {formData.degree}
+          </p>
+
+          <h3>Objective</h3>
+          <p>{formData.objective}</p>
+
+          <h3>Skills</h3>
+
+          <ol>
+            {formData.skills.map((skill, index) => (
+              <li key={index}>{skill}</li>
+            ))}
+          </ol>
+
+          <h3>Degree Qualification</h3>
+
+          <table border="1" cellPadding="8">
+            <thead>
+              <tr>
+                <th>Qualification</th>
+                <th>Institute</th>
+                <th>Year</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td>{formData.degree}</td>
+                <td>{formData.university}</td>
+                <td>2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
   );
 }
 
